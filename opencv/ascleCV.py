@@ -38,16 +38,16 @@ def get_qtd_pixel(img):
 	return img.shape[0] * img.shape[1]
 
 def print_pixeis(img, qtd):
-	imageWidth = img.shape[1] 
-	imageHeight = img.shape[0]
+	imageLargura = img.shape[1] 
+	imageComprimento = img.shape[0]
 
-	if(qtd<1) or (qtd>(imageWidth*imageHeight)):
+	if(qtd<1) or (qtd>(imageLargura*imageComprimento)):
 		return 'Quantidade invalida'
-	elif:
+	else:
 		for i in range(qtd):
 			print(img.item(xPos, yPos))
-			if(xPos < imageWidth):
-				if(yPos < imageHeight):
+			if(xPos < imageLargura):
+				if(yPos < imageComprimento):
 					yPos = yPos + 1
 					xPos = 0
 				xPos = xPos + 1 
@@ -55,14 +55,15 @@ def print_pixeis(img, qtd):
 
 def estegano_lsd(img, text):
 	text = str(text)
-	imageWidth = img.shape[1] #Get image width
-	imageHeight = img.shape[0] #Get image height
+	imageLargura = img.shape[1] #Get image width
+	imageComprimento = img.shape[0] #Get image height
 
 	xPos = 0
 	yPos = 0
 
-	#format(ord('a'), 'b').zfill(8)
-	#image.itemset((xPos, yPos), 255)
+	if((len(text)*8) > imageLargura*imageComprimento):
+		raise Exception('O tamanho da mensagem é maior que o tamanha imagem')
+
 
 	for char in text:
 		for bit in format(ord(char), 'b').zfill(8):
@@ -76,11 +77,14 @@ def estegano_lsd(img, text):
 					pixel = pixel + 1
 
 			img.itemset((xPos, yPos), pixel)
-			if(xPos < imageWidth):
-				if(yPos < imageHeight):
-					yPos = yPos + 1
-					xPos = 0
-				xPos = xPos + 1 
+			
+			xPos = xPos + 1
+			if(xPos >= imageLargura):
+				xPos = 0
+				yPos = yPos + 1
+			
+				if(yPos >= imageComprimento):
+					raise Exception('A imagem chegou ao final, mensagem muito grande para a imagem')
 	return img
 
 
