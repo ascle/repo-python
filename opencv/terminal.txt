@@ -1,20 +1,9 @@
-Python 3.6.4 |Anaconda, Inc.| (default, Jan 16 2018, 18:25:17) 
-[GCC 7.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import cv2
->>> import numpy as np
->>> img = cv2.imread('satanas.png')
->>> img.shape
-(455, 500, 3)
->>> img.item(0,0,2), img.item(0,0,1), img.item(0,0,0)
-(78, 52, 51)
->>> # imprimindo o canal RGB
-... 
->>> # modificando um pixel
+
 ... 
 >>> img.itemset((0,0,2), 255)
 >>> img.item(0,0,2), img.item(0,0,1), img.item(0,0,0)
 (255, 52, 51)
+# pixel, canal
 >>> img.itemset((0,0,1), 0)
 >>> img.itemset((0,0,0), 0)
 >>> cv2.imshow('dfdf', img)
