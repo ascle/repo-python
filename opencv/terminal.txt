@@ -19,3 +19,8 @@
 >>> img.itemset((1,1), 255)
 >>> img.itemset((2,2), 255)
 >>> ascle.ver_img(img)
+
+
+
+git clone https://github.com/ascle/repo-python.git
+

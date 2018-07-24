@@ -37,20 +37,17 @@ def get_qtd_canais(img):
 def get_qtd_pixel(img):
 	return img.shape[0] * img.shape[1]
 
-def print_pixeis(img, qtd):
+def print_pixeis(img):
 	imageLargura = img.shape[1] 
 	imageComprimento = img.shape[0]
 
-	if(qtd<1) or (qtd>(imageLargura*imageComprimento)):
-		return 'Quantidade invalida'
-	else:
-		for i in range(qtd):
-			print(img.item(xPos, yPos))
-			if(xPos < imageLargura):
-				if(yPos < imageComprimento):
-					yPos = yPos + 1
-					xPos = 0
-				xPos = xPos + 1 
+	xPos = 0
+	yPos = 0
+
+	for yPos in range(imageComprimento):
+		for xPos in range(imageLargura):
+			print(img.item(yPos, xPos))
+			
 
 
 def estegano_lsd(img, text):
@@ -67,7 +64,7 @@ def estegano_lsd(img, text):
 
 	for char in text:
 		for bit in format(ord(char), 'b').zfill(8):
-			pixel = img.item(xPos, yPos)
+			pixel = img.item(yPos, xPos)
 			bit = int(bit)
 
 			if((bit%2) != (pixel%2)):
@@ -76,7 +73,7 @@ def estegano_lsd(img, text):
 				else:
 					pixel = pixel + 1
 
-			img.itemset((xPos, yPos), pixel)
+			img.itemset((yPos, xPos), pixel)
 			
 			xPos = xPos + 1
 			if(xPos >= imageLargura):
@@ -88,3 +85,27 @@ def estegano_lsd(img, text):
 	return img
 
 
+def des_estegano_lsd(img):
+	imageLargura = img.shape[1] 
+	imageComprimento = img.shape[0]
+
+	xPos = 0
+	yPos = 0
+
+	texto = ''
+	letra = ''
+
+	for yPos in range(imageComprimento):
+		for xPos in range(imageLargura):
+			pixel = img.item(yPos, xPos)
+
+			if(pixel%2 == 0):
+				letra = '%s0'%(letra)
+			else:
+				letra = '%s1'%(letra)
+
+			if(len(letra) == 8):
+				texto = '%s%s'%(texto, chr(int(letra, 2)))
+				letra = ''
+
+	return texto		
