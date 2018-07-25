@@ -109,3 +109,18 @@ def des_estegano_lsd(img):
 				letra = ''
 
 	return texto		
+
+
+def img_chanel(img, canal):
+	imageLargura = img.shape[1] 
+	imageComprimento = img.shape[0]
+	nova_img = img
+
+	for yPos in range(imageComprimento):
+		for xPos in range(imageLargura):
+			if(int(format(img.item(yPos,xPos), 'b').zfill(8)[canal]) == 0):
+				nova_img.itemset((yPos, xPos), 0)
+			else:
+				nova_img.itemset((yPos, xPos), 255)
+			
+	return nova_img		
