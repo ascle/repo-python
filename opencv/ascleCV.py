@@ -114,7 +114,8 @@ def des_estegano_lsd(img):
 def img_chanel(img, canal):
 	imageLargura = img.shape[1] 
 	imageComprimento = img.shape[0]
-	nova_img = img
+	#nova_img = np.zeros((imageComprimento,imageLargura,1), dtype=np.uint8)
+	nova_img = cv2.CreateImage((imageComprimento, imageLargura), cv2.IPL_DEPTH_8U, 1)
 
 	for yPos in range(imageComprimento):
 		for xPos in range(imageLargura):

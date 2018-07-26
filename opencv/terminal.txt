@@ -21,6 +21,16 @@
 >>> ascle.ver_img(img)
 
 
+>>> import ascleCV as ascle
+>>> img = ascle.abr_img_cinza('eu.jpeg')
+>>> img2 = ascle.img_chanel(img, 0)
+>>> ascle.ver_img(img)
+>>> ascle.ver_img(img2)
+>>> img3 = ascle.abr_img_cinza('eu.jpeg')
+>>> ascle.ver_img(img3)
 
+
+
+https://www.programcreek.com/python/example/8473/cv.CreateImage
 git clone https://github.com/ascle/repo-python.git
 
