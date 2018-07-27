@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+#  "
+
 def verImagem(img):
     cv2.imshow("Imagem", img)
     cv2.waitKey(0)
@@ -31,22 +33,55 @@ def limiarESalvar(nomeArquivo, thresh, novoNome):
     imglim = limiar(nomeArquivo, thresh)
     cv2.imwrite(str(novoNome), imglim)
 
+def suavizar(nomeArquivo):
+    cv2.imshow("Original", limiar(nomeArquivo, 200))
+    cv2.imshow("bilateralFilter", cv2.bilateralFilter(limiar(nomeArquivo, 200),9,75,75))
+    cv2.imshow("medianBlur", cv2.medianBlur(limiar(nomeArquivo, 200),5))
 
-def opcvhou(nomeArquivo):
-    gray = abrirImagCinza(nomeArquivo)
-    edges = cv2.Canny(gray, 75, 150)
- 
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 30, maxLineGap=250)
- 
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def comparar(nomeArquivo):
+    img = cv2.imread(nomeArquivo)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+    imgCanny = cv2.Canny(gray,50,150,apertureSize = 3)
+    cv2.imshow("Canny", imgCanny)
+    cv2.imshow("Limiar", limiar(nomeArquivo, 200))
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()      
+
+def hough2(nomeArquivo, minLineLength, maxLineGap):
+    img = cv2.imread(nomeArquivo)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray,50,150,apertureSize = 3)
+
+    lines = cv2.HoughLinesP(edges,1,np.pi/180,60,minLineLength,maxLineGap)
+    
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
- 
+        cv2.line(gray, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
     cv2.imshow("Edges", edges)
-    cv2.imshow("Image", img)
+    cv2.imshow('Cinza', gray)
     cv2.waitKey(0)
-    cv2.destroyAllWindows()
- 
+    cv2.destroyAllWindows()  
+
+def hough3(nomeArquivo, minLineLength, maxLineGap):
+    gray = abrirImagCinza(nomeArquivo)
+    edges = cv2.medianBlur(limiar(nomeArquivo, 200),5)
+
+    lines = cv2.HoughLinesP(edges,1,np.pi/180,100,minLineLength,maxLineGap)
+    
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        cv2.line(gray, (x1, y1), (x2, y2), (0, 255, 0), 2)
+cor verde e jogar na binaria
+    cv2.imshow("Edges", edges)
+    cv2.imshow('Cinza', gray)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
  
 def hough(im, ntx=500, mry=455):
     "Calculate Hough transform."
