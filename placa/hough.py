@@ -2,6 +2,7 @@ from math import hypot, pi, cos, sin
 from PIL import Image
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 def verImagem(img):
     cv2.imshow("Imagem", img)
@@ -13,7 +14,22 @@ def abrirImagCinza(nomeArquivo):
     img = cv2.imread(nomeArquivo)
     return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    
+def plotarHist(img):
+    plt.figure()
+    h = plt.hist (img.ravel(), bins=256)
+    r = np.linspace (0,255,300)
+    t = np.log1p (r * 10) * .2 * np.max (h[0])
+    plt.plot (r,t,'r-')
+    plt.show()
+
+def limiar(nomeArquivo, thresh):
+    imgCinza = abrirImagCinza(nomeArquivo)
+    ret, imglim = cv2.threshold(imgCinza,thresh, 255, cv2.THRESH_BINARY)
+    return imglim
+
+def limiarESalvar(nomeArquivo, thresh, novoNome):
+    imglim = limiar(nomeArquivo, thresh)
+    cv2.imwrite(str(novoNome), imglim)
 
 
 def opcvhou(nomeArquivo):

@@ -1,0 +1,14 @@
+Questões
+
+1) Converter imagem para tons de cinza
+
+2) Limiarizar a imagem
+2.1) Qual o criterio utilizado para a escolha do metodo de limiarização?
+2.2) Qual o critério para a escolha do thereshold?
+2.3) Qual o custo de cada método thresholt?
+
+O openCv possui o thereshold() e oadaptiveThereshold
+
+
+
+3) Diminuir ruidos
