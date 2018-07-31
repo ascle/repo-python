@@ -8,6 +8,10 @@ accumulator, thetas, rhos = h.hough_line(image)
 
 # Easiest peak finding based on max votes
 idx = np.argmax(accumulator)
-rho = rhos[idx / accumulator.shape[1]]
+
+print('idx {}'.format(idx))
+print('accumulator {}'.format(accumulator.shape[1]))
+
+rho = rhos[int(idx) / int(accumulator.shape[1])]
 theta = thetas[idx % accumulator.shape[1]]
 print ("rho={}, theta={}".format(rho, np.rad2deg(theta)))

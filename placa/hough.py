@@ -52,6 +52,8 @@ def verPreProcessamento(nomeArquivo):
     
     cv2.imshow("Cinza Suavizada Limiar", limiar(cv2.medianBlur(gray, 5), 200))
 
+    cv2.imshow("Cinza Limiar Canny", cv2.Canny(imgLimiar,50,150,apertureSize = 3))
+
     cv2.waitKey(0)
     cv2.destroyAllWindows()      
 
@@ -72,37 +74,43 @@ def houghCC(nomeArquivo, minLineLength, maxLineGap):
     cv2.destroyAllWindows()  
 
 # cinza linear hough
-def houghCL(nomeArquivo, minLineLength, maxLineGap):
+def houghCL(nomeArquivo, threshold = 100, minLineLength = 100, maxLineGap = 10):
+    img = cv2.imread(nomeArquivo)
     gray = abrirImagCinza(nomeArquivo)
  
-    imgLinear = limiar(nomeArquivo, 200)
+    imgLinear = limiar(gray, 200)
     
-    lines = cv2.HoughLinesP(imgLinear,1,np.pi/180,100,minLineLength,maxLineGap)
+    lines = cv2.HoughLinesP(imgLinear, 1, np.pi/180, threshold, minLineLength, maxLineGap)
     
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(gray, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
     cv2.imshow("Edges", imgLinear)
-    cv2.imshow('Cinza', gray)
+    cv2.imshow('Cinza', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
 
 # cinza linear canny hough
-def houghCLC(nomeArquivo, minLineLength, maxLineGap):
+# h.houghCLC('exCars/image_0008.jpg', 0, 1, 0)
+def houghCLC(nomeArquivo, threshold = 100, minLineLength = 100, maxLineGap = 10):
+    img = cv2.imread(nomeArquivo)
     gray = abrirImagCinza(nomeArquivo)
  
-    imgLinear = limiar(nomeArquivo, 200)
+    imgLinear = limiar(gray, 200)
     edges = cv2.Canny(imgLinear,50,150,apertureSize = 3)
 
-    lines = cv2.HoughLinesP(edges,1,np.pi/180,100,minLineLength,maxLineGap)
+    lines = cv2.HoughLinesP(edges,1,np.pi/180,threshold,minLineLength,maxLineGap)
     
+    #print('threshold {}'.format(threshold))
+    print('Linhas {}'.format(len(lines)))
+
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        cv2.line(gray, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
     cv2.imshow("Edges", edges)
-    cv2.imshow('Cinza', gray)
+    cv2.imshow('Cinza', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
  
@@ -123,7 +131,7 @@ def houghCLS(nomeArquivo, minLineLength, maxLineGap):
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
 
-
+# https://alyssaq.github.io/2014/understanding-hough-transform/
 def hough_line(img):
     # Rho and Theta ranges
     thetas = np.deg2rad(np.arange(-90.0, 90.0))
@@ -137,7 +145,7 @@ def hough_line(img):
     num_thetas = len(thetas)
 
     # Hough accumulator array of theta vs rho
-    accumulator = np.zeros((2 * diag_len, num_thetas), dtype=np.uint8)
+    accumulator = np.zeros((int(2 * diag_len), num_thetas), dtype=np.uint64)
     y_idxs, x_idxs = np.nonzero(img)  # (row, col) indexes to edges
 
     # Vote in the hough accumulator
@@ -148,9 +156,40 @@ def hough_line(img):
     for t_idx in range(num_thetas):
         # Calculate rho. diag_len is added for a positive index
         rho = round(x * cos_t[t_idx] + y * sin_t[t_idx]) + diag_len
-        accumulator[rho, t_idx] += 1
+        accumulator[int(rho), t_idx] += 1
 
     return accumulator, thetas, rhos
+
+
+# http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
+# Sem progresso, msm variando o fi e o ele só retorna uma linha
+def houghv1(nomeArquivo, threshold = 200, outro = 1000):
+    img = cv2.imread(nomeArquivo)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray,50,150,apertureSize = 3)
+
+    lines = cv2.HoughLines(edges,10,np.pi/180,threshold)
+
+    print('threshold {}'.format(threshold))
+    print('Linhas {}'.format(len(lines[0])))
+
+    for rho,theta in lines[0]:
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a*rho
+        y0 = b*rho
+        x1 = int(x0 + outro*(-b))
+        y1 = int(y0 + outro*(a))
+        x2 = int(x0 - outro*(-b))
+        y2 = int(y0 - outro*(a))
+
+
+        cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
+
+    cv2.imshow("Edges", edges)
+    cv2.imshow('Imagem', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()     
 
 
 def hough(im, ntx=500, mry=455):
