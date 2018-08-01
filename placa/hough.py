@@ -118,9 +118,14 @@ def houghCLC(nomeArquivo, rho = 1, threshold = 100, minLineLength = 100, maxLine
     #for x1,y1,x2,y2 in lines[0]:
     #    cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
 
-    for x in range(0, len(lines)//4):
+    for x in range(0, len(lines)):
         for x1,y1,x2,y2 in lines[x]:
-            cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
+            a = np.array((x1,y1))
+            b = np.array((x2,y2))
+
+            dist = np.linalg.norm(a-b)
+            if(dist > minLineLength):
+                cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
 
     cv2.imshow("Edges", edges)
     cv2.imshow('Cinza', img)
