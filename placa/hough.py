@@ -93,21 +93,34 @@ def houghCL(nomeArquivo, threshold = 100, minLineLength = 100, maxLineGap = 10):
 
 # cinza linear canny hough
 # h.houghCLC('exCars/image_0008.jpg', 0, 1, 0)
-def houghCLC(nomeArquivo, threshold = 100, minLineLength = 100, maxLineGap = 10):
+
+# rho
+# theta
+# threshold, which means minimum vote it should get for it to be considered as a line
+# minLineLength - Comprimento mínimo da linha. Segmentos de linha mais curtos do que isso são rejeitados.
+# maxLineGap - intervalo máximo permitido entre os segmentos de linha para tratá-los como uma única linha.
+def houghCLC(nomeArquivo, rho = 1, threshold = 100, minLineLength = 100, maxLineGap = 10):
     img = cv2.imread(nomeArquivo)
     gray = abrirImagCinza(nomeArquivo)
  
     imgLinear = limiar(gray, 200)
     edges = cv2.Canny(imgLinear,50,150,apertureSize = 3)
 
-    lines = cv2.HoughLinesP(edges,1,np.pi/180,threshold,minLineLength,maxLineGap)
+    lines = cv2.HoughLinesP(edges, rho, np.pi/180, threshold, minLineLength, maxLineGap)
     
-    #print('threshold {}'.format(threshold))
+    print('rho: {} threshold: {} minLineLength: {} maxLineGap: {}'.format(rho, threshold, minLineLength, maxLineGap))
     print('Linhas {}'.format(len(lines)))
 
-    for line in lines:
-        x1, y1, x2, y2 = line[0]
-        cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #for line in lines:
+    #    x1, y1, x2, y2 = line[0]
+    #    cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+    #for x1,y1,x2,y2 in lines[0]:
+    #    cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
+
+    for x in range(0, len(lines)//4):
+        for x1,y1,x2,y2 in lines[x]:
+            cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
 
     cv2.imshow("Edges", edges)
     cv2.imshow('Cinza', img)
