@@ -106,7 +106,7 @@ def houghCLC(nomeArquivo, rho = 1, threshold = 100, minLineLength = 100, maxLine
     imgLinear = limiar(gray, 200)
     edges = cv2.Canny(imgLinear,50,150,apertureSize = 3)
 
-    lines = cv2.HoughLinesP(edges, rho, np.pi/180, threshold, minLineLength, maxLineGap)
+    lines = cv2.HoughLinesP(edges, rho, np.pi/60, threshold, minLineLength, maxLineGap)
     
     print('rho: {} threshold: {} minLineLength: {} maxLineGap: {}'.format(rho, threshold, minLineLength, maxLineGap))
     print('Linhas {}'.format(len(lines)))
