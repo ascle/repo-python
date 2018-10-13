@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import socket
 import threading
 
@@ -23,11 +24,11 @@ print ('[*] Listening on: %s:%d' %(bind_ip, bind_porta))
 while True:
   # Cliente se conecta
   client, addr = server.accept()
-  print ('[*] Accepted cooection from: %s:%d' %(addr[0], addr[1]))
+  print ('[*] Accepted conection from: %s:%d' %(addr[0], addr[1]))
   
   #coloca nossa thread de cliente em ação para tratar dados de entrada
   client_handler = threading.Thread(target=handle_client, args=(client,))
-  client_handler.start
+  client_handler.start()
 
 
     
