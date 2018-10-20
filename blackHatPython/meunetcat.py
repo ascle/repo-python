@@ -183,5 +183,20 @@ def client_handler(client_socket):
         client_socket.send(output)
         
     # entra em outro laço se um shell
-        
+    if command:
+        while True:
+            # mostra um prompt simples
+            client_socket.send('<BHP:#> ')
+            # agora ficamos recebendo dados até vermos um linefeed
+            cmd_buffer = ''
+            while '\n' not in cmd_buffer:
+                cmd_buffer +=client_socket.recv(1024)
+                
+            # envia de volta a saida do comando
+            response = run_command(cmd_buffer)
+            
+            # envia de volta a resposta
+            client_socket.send(response)
+            
+    
 main()
