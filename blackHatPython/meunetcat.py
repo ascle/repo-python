@@ -5,6 +5,8 @@ import getopt
 import threading
 import subprocess
 
+# verificar se o endereço já está em uso
+
 # define algumas variaveis globais
 listen  = False
 command = False
@@ -136,7 +138,7 @@ def server_loop():
         
 def run_command(command):
     # remove a quebra de linha
-    command = command.rstrinp()
+    command = command.rstrip()
     
     # executa o comando e obtém os dados de saída
     try:
